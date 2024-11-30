@@ -1,7 +1,4 @@
-"""
-Docker configuration for the React frontend.
-"""
-
+# Docker configuration for React frontend
 FROM node:16
 WORKDIR /app
 COPY package.json package-lock.json ./
