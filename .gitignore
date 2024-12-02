@@ -4,13 +4,53 @@ __pycache__/
 *.pyo
 .env
 venv/
+*.egg-info/
+dist/
+build/
 
 # Node.js
 node_modules/
 .env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Docker
 *.log
+docker-compose.override.yml
 
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Environment variable files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Miscellaneous
+*.swp
+*~
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Frontend build
+frontend/build/
 
 create_frontend_files.sh
+
+# Additional exclusions
+# Exclude the entire env directory if it's not already covered
+env/

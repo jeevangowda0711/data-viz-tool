@@ -16,10 +16,7 @@ class Config:
     DEBUG = False
 
     # Database Configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL',
-        'postgresql://username:password@localhost:5432/your_database'
-    )
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///default.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # JWT Configuration
