@@ -4,3 +4,14 @@ pandas
 redis
 bcrypt
 python-dotenv
+sqlalchemy
+psycopg2-binary  # PostgreSQL driver
+alembic  # Database migrations
+passlib[bcrypt]  # Password hashing
+python-jose  # JWT handling
+requests  # For making HTTP requests to AI APIs
+matplotlib  # For creating visualizations
+scikit-learn  # For preprocessing datasets
+pydantic<2  # Pydantic version below 2
+email-validator  # Explicitly add email-validator
+python-multipart  # For handling form data in FastAPI
