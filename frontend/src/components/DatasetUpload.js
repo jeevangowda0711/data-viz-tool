@@ -7,6 +7,7 @@ import API from '../services/api';
 
 function DatasetUpload() {
   const [file, setFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -23,8 +24,10 @@ function DatasetUpload() {
           'Content-Type': 'multipart/form-data',
         },
       });
+      setUploadStatus('Upload successful!');
       console.log('Upload successful:', response.data);
     } catch (error) {
+      setUploadStatus('Upload failed.');
       console.error('Upload failed:', error);
     }
   };
@@ -36,6 +39,7 @@ function DatasetUpload() {
         <input type="file" onChange={handleFileChange} required />
         <button type="submit">Upload</button>
       </form>
+      {uploadStatus && <p>{uploadStatus}</p>}
     </div>
   );
 }

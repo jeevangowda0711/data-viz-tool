@@ -49,6 +49,7 @@ coverage/
 # Frontend build
 frontend/build/
 
+createfiles.sh
 create_frontend_files.sh
 
 # Additional exclusions

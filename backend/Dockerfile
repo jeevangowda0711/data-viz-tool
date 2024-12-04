@@ -1,6 +1,6 @@
-"""
-Docker configuration for the FastAPI backend.
-"""
+# """
+# Docker configuration for the FastAPI backend.
+# """
 
 FROM python:3.10-slim
 WORKDIR /app
