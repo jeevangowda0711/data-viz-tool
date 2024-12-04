@@ -9,6 +9,7 @@ function VisualizationConfig() {
   const [datasetId, setDatasetId] = useState('');
   const [xColumn, setXColumn] = useState('');
   const [yColumn, setYColumn] = useState('');
+  const [chartType, setChartType] = useState('bar');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +18,7 @@ function VisualizationConfig() {
         dataset_id: datasetId,
         x_column: xColumn,
         y_column: yColumn,
+        chart_type: chartType,
       });
       console.log('Visualization created:', response.data);
     } catch (error) {
@@ -39,6 +41,14 @@ function VisualizationConfig() {
         <div>
           <label>Y Column:</label>
           <input type="text" value={yColumn} onChange={(e) => setYColumn(e.target.value)} required />
+        </div>
+        <div>
+          <label>Chart Type:</label>
+          <select value={chartType} onChange={(e) => setChartType(e.target.value)}>
+            <option value="bar">Bar</option>
+            <option value="line">Line</option>
+            <option value="pie">Pie</option>
+          </select>
         </div>
         <button type="submit">Create Visualization</button>
       </form>

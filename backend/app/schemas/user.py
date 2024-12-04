@@ -4,18 +4,17 @@
 Defines Pydantic models for user-related requests and responses.
 """
 
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 
 class UserCreate(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 class UserResponse(BaseModel):
     id: int
-    email: EmailStr
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    email: str
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        orm_mode = True
