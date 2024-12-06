@@ -40,4 +40,3 @@ function AIInsights() {
 }
 
 export default AIInsights;
-

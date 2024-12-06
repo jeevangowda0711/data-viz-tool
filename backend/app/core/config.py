@@ -32,6 +32,8 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///default.db')  # Adjust this to your actual database URL
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'your-default-jwt-secret-key')  # Replace with your actual secret key
 
 class ProductionConfig(Config):
     DEBUG = False

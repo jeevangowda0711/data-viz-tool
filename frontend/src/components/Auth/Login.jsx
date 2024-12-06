@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
-import { signup } from '../../services/auth';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../../services/auth';
 
-/**
- * Signup component for new user registration.
- */
-
-function Signup() {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      const response = await signup(email, password);
-      console.log('Signup successful:', response);
+      const response = await login(email, password);
+      console.log('Login successful:', response);
+      localStorage.setItem('token', response.access_token);
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Signup failed:', error);
+      console.error('Login failed:', error);
+      setError('Login failed. Please try again.');
     }
   };
 
   return (
     <div>
-      <h2>Signup</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
@@ -31,10 +34,11 @@ function Signup() {
           <label>Password:</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        <button type="submit">Signup</button>
+        <button type="submit">Login</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </div>
   );
 }
 
-export default Signup;
+export default Login;

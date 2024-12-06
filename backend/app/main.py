@@ -5,6 +5,7 @@ Main entry point for the FastAPI backend application.
 """
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models.base import Base
@@ -24,6 +25,15 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 app = FastAPI()
 
+# Allow CORS for all origins (for development purposes)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this to specific origins in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Create the database tables
 Base.metadata.create_all(bind=engine)
 
@@ -35,9 +45,8 @@ def on_startup():
 def on_shutdown():
     pass
 
-# Example route
 @app.get("/")
-def read_root():
+async def root():
     return {"message": "Hello World"}
 
 # Include routers
