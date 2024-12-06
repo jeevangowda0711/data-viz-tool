@@ -4,9 +4,7 @@
 Defines Pydantic models for user-related requests and responses.
 """
 
-from pydantic import BaseModel, EmailStr
-from typing import Optional
-from datetime import datetime
+from pydantic import BaseModel
 
 class UserCreate(BaseModel):
     email: str

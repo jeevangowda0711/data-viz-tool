@@ -11,7 +11,7 @@ from app.models.user import User
 from app.schemas.user import UserCreate, UserResponse
 from app.core.config import Config
 from app.database import get_db
-from app.core.security import get_password_hash
+from app.core.security import get_password_hash, verify_password
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -43,6 +43,7 @@ def create_user(db: Session, user: UserCreate) -> UserResponse:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    print(f"User created: {db_user.email}")
     return UserResponse(id=db_user.id, email=db_user.email)
 
 def authenticate_user(db: Session, email: str, password: str) -> UserResponse:

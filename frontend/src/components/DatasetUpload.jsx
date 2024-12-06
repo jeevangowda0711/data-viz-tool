@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import API from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 /**
  * Component for uploading datasets for visualization.
@@ -8,6 +9,7 @@ import API from '../services/api';
 function DatasetUpload() {
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -19,7 +21,7 @@ function DatasetUpload() {
     formData.append('file', file);
 
     try {
-      const response = await API.post('/datasets/upload', formData, {
+      const response = await axios.post('http://localhost:8000/datasets/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -38,8 +40,8 @@ function DatasetUpload() {
       <form onSubmit={handleSubmit}>
         <input type="file" onChange={handleFileChange} required />
         <button type="submit">Upload</button>
+        {uploadStatus && <p>{uploadStatus}</p>}
       </form>
-      {uploadStatus && <p>{uploadStatus}</p>}
     </div>
   );
 }
