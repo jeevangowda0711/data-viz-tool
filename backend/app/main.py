@@ -25,16 +25,14 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 app = FastAPI()
 
-# Allow CORS for all origins (for development purposes)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this to specific origins in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Create the database tables
 Base.metadata.create_all(bind=engine)
 
 @app.on_event("startup")
@@ -49,7 +47,6 @@ def on_shutdown():
 async def root():
     return {"message": "Hello World"}
 
-# Include routers
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(dataset_upload_router, prefix="/datasets", tags=["datasets"])
 app.include_router(visualization_router, prefix="/visualizations", tags=["visualizations"])

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import API from '../services/api';
 
 /**
@@ -6,15 +6,34 @@ import API from '../services/api';
  */
 
 function AIInsights() {
-  const [datasetId, setDatasetId] = useState('');
   const [insights, setInsights] = useState(null);
+  const [error, setError] = useState(null);
+  const [datasetId, setDatasetId] = useState('');
+  const [datasets, setDatasets] = useState([]);
+
+  useEffect(() => {
+    // Fetch available datasets
+    const fetchDatasets = async () => {
+      try {
+        const response = await API.get('/datasets');
+        setDatasets(response.data);
+      } catch (error) {
+        console.error('Failed to fetch datasets:', error);
+      }
+    };
+
+    fetchDatasets();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await API.post('/ai/insights', { dataset_id: parseInt(datasetId) });
-      setInsights(response.data.insights);
+      const response = await API.post('/ai/insights', {
+        dataset_id: datasetId,
+      });
+      setInsights(response.data);
     } catch (error) {
+      setError(error);
       console.error('Failed to generate insights:', error);
     }
   };
@@ -24,8 +43,15 @@ function AIInsights() {
       <h2>AI Insights</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Dataset ID:</label>
-          <input type="text" value={datasetId} onChange={(e) => setDatasetId(e.target.value)} required />
+          <label>Select Dataset:</label>
+          <select value={datasetId} onChange={(e) => setDatasetId(e.target.value)} required>
+            <option value="" disabled>Select a dataset</option>
+            {datasets.map((dataset) => (
+              <option key={dataset.id} value={dataset.id}>
+                {dataset.name}
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit">Generate Insights</button>
       </form>
@@ -35,6 +61,7 @@ function AIInsights() {
           <pre>{JSON.stringify(insights, null, 2)}</pre>
         </div>
       )}
+      {error && <p>Error: {error.message}</p>}
     </div>
   );
 }
