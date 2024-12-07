@@ -31,3 +31,10 @@ async def upload_dataset(file: UploadFile = File(...), db: Session = Depends(get
     db.refresh(dataset)
     
     return DatasetResponse(id=dataset.id, name=dataset.name, data=dataset.data)
+
+@router.get("/{dataset_id}", response_model=DatasetResponse)
+def get_dataset(dataset_id: int, db: Session = Depends(get_db)):
+    dataset = db.query(Dataset).filter(Dataset.id == dataset_id).first()
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    return dataset

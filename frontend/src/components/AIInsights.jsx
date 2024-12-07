@@ -12,7 +12,7 @@ function AIInsights() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await API.post('/ai/insights', { dataset_id: datasetId });
+      const response = await API.post('/ai/insights', { dataset_id: parseInt(datasetId) });
       setInsights(response.data.insights);
     } catch (error) {
       console.error('Failed to generate insights:', error);
