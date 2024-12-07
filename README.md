@@ -6,7 +6,7 @@ Johnny Quach CWID: 885168989
 
 email: JqJohnny@csu.fullerton.edu
 
-Jeevan Gowda CWID: 885168989
+Jeevan Gowda Hemanth Kumar CWID: 885168989
 
 email: jeevangowda@csu.fullerton.edu
 
@@ -18,7 +18,7 @@ email: 4srehome@csu.fullerton.edu
 # data-viz-tool
 
 ### Features
-- User Authentication
-- Dataset Upload
-- Interactive Visualizations
-- AI-Generated Insights
+- User Authentication - Done
+- Dataset Upload - Done
+- Interactive Visualizations - Done
+- AI-Generated Insights - in-progress 
