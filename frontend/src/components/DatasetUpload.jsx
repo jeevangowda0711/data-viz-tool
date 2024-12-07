@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../services/api';
 
 /**
  * Component for uploading datasets for visualization.
@@ -8,12 +7,8 @@ import axios from 'axios';
 
 function DatasetUpload() {
   const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState('');
-  const navigate = useNavigate();
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,15 +16,15 @@ function DatasetUpload() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:8000/datasets/upload', formData, {
+      const response = await API.post('/datasets/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setUploadStatus('Upload successful!');
+      setSuccess('Upload successful');
       console.log('Upload successful:', response.data);
     } catch (error) {
-      setUploadStatus('Upload failed.');
+      setError('Upload failed');
       console.error('Upload failed:', error);
     }
   };
@@ -38,10 +33,14 @@ function DatasetUpload() {
     <div>
       <h2>Upload Dataset</h2>
       <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} required />
+        <div>
+          <label>Choose file:</label>
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} required />
+        </div>
         <button type="submit">Upload</button>
-        {uploadStatus && <p>{uploadStatus}</p>}
       </form>
+      {success && <p>{success}</p>}
+      {error && <p>{error}</p>}
     </div>
   );
 }

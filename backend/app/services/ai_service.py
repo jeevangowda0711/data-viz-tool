@@ -29,7 +29,7 @@ def generate_insights(dataset_id: int, db: Session):
     genai.configure(api_key=Config.GEMINI_API_KEY)
 
     # Initialize the model
-    model = genai.GenerativeModel(Config.GEMINI_MODEL_NAME)
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
     # Define the prompt for the AI API
     prompt = f"Generate insights for the following data: {data_payload}"
