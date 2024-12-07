@@ -4,38 +4,18 @@
 Integrates AI APIs to generate insights from datasets.
 """
 
-from fastapi import APIRouter, HTTPException
-import pandas as pd
-import requests
+from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.orm import Session
+from pydantic import BaseModel
+from app.database import get_db
+from app.services.ai_service import generate_insights
 
 router = APIRouter()
 
-datasets = {}
+class InsightsRequest(BaseModel):
+    dataset_id: int
 
-@router.post("/ai/insights")
-async def generate_insights(dataset_id: str):
-    if dataset_id not in datasets:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-    
-    df = datasets[dataset_id]
-    data_payload = df.to_json(orient='records')
-
-    ai_api_endpoint = "https://api.geminiai.com/v1/insights"
-    headers = {
-        "Authorization": f"Bearer {Config.GEMINI_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "model": Config.GEMINI_MODEL_NAME,
-        "data": data_payload
-    }
-
-    try:
-        response = requests.post(ai_api_endpoint, json=payload, headers=headers)
-        response.raise_for_status()
-        insights = response.json()
-    except requests.exceptions.RequestException:
-        raise HTTPException(status_code=500, detail="Error calling the AI API")
-
-    return {"insights": insights}
+@router.post("/insights")
+async def generate_insights_endpoint(request: InsightsRequest, db: Session = Depends(get_db)):
+    return generate_insights(request.dataset_id, db)
 

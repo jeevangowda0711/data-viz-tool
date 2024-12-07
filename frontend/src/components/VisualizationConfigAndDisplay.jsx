@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import API from '../services/api';
 import {
   Chart as ChartJS,
@@ -37,6 +37,22 @@ function VisualizationConfigAndDisplay() {
   const [yColumn, setYColumn] = useState('');
   const [chartType, setChartType] = useState('bar');
   const [visualization, setVisualization] = useState(null);
+  const [dataset, setDataset] = useState(null);
+
+  useEffect(() => {
+    if (datasetId) {
+      const fetchDataset = async () => {
+        try {
+          const response = await API.get(`/datasets/${datasetId}`);
+          setDataset(JSON.parse(response.data.data));
+        } catch (error) {
+          console.error('Failed to fetch dataset:', error);
+        }
+      };
+
+      fetchDataset();
+    }
+  }, [datasetId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,21 +70,30 @@ function VisualizationConfigAndDisplay() {
   };
 
   const renderChart = () => {
-    if (!visualization) return null;
+    if (!visualization || !dataset) return null;
 
     const config = JSON.parse(visualization.config_data);
-    const data = {
-      labels: config.labels || [],  // Ensure labels are part of the config_data
+    const labels = Object.values(dataset[config.x_column]);
+    const data = Object.values(dataset[config.y_column]);
+
+    console.log('Config:', config);  // Add logging to verify config data
+    console.log('Labels:', labels);  // Add logging to verify the labels
+    console.log('Data:', data);  // Add logging to verify the data
+
+    const chartData = {
+      labels: labels || [],  // Ensure labels are part of the config_data
       datasets: [
         {
           label: visualization.chart_type,
-          data: config.data || [],  // Ensure data is part of the config_data
+          data: data || [],  // Ensure data is part of the config_data
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
         },
       ],
     };
+
+    console.log('Chart Data:', chartData);  // Add logging to verify the chart data
 
     let ChartComponent;
     switch (visualization.chart_type) {
@@ -85,7 +110,7 @@ function VisualizationConfigAndDisplay() {
         return <div>Unsupported chart type</div>;
     }
 
-    return <ChartComponent data={data} />;
+    return <ChartComponent data={chartData} />;
   };
 
   return (
