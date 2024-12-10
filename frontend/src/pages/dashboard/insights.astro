@@ -1,0 +1,8 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import AIInsights from '../../components/dashboard/AIInsights';
+---
+<DashboardLayout title="AI Insights">
+  <h1 class="text-3xl font-bold mb-8">AI-Powered Insights</h1>
+  <AIInsights client:load />
+</DashboardLayout>

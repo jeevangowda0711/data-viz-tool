@@ -1,0 +1,15 @@
+---
+import ThemeToggle from './ThemeToggle';
+---
+
+<header class="fixed w-full bg-white dark:bg-gray-900 shadow-sm z-50">
+  <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <a href="/" class="text-2xl font-bold text-primary">VizAI</a>
+    
+    <div class="flex items-center gap-4">
+      <ThemeToggle client:load />
+      <a href="/login" class="btn-secondary">Login</a>
+      <a href="/signup" class="btn-primary">Sign Up</a>
+    </div>
+  </nav>
+</header>

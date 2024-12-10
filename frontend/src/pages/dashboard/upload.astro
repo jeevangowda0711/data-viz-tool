@@ -1,0 +1,9 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import DatasetUpload from '../../components/dashboard/DatasetUpload';
+---
+
+<DashboardLayout title="Upload Dataset">
+  <h1 class="text-3xl font-bold mb-8">Upload Dataset</h1>
+  <DatasetUpload client:load />
+</DashboardLayout>

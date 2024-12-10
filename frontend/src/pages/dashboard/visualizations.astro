@@ -1,0 +1,9 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import VisualizationBuilder from '../../components/dashboard/VisualizationBuilder';
+---
+
+<DashboardLayout title="Visualizations">
+  <h1 class="text-3xl font-bold mb-8">Create Visualization</h1>
+  <VisualizationBuilder client:load />
+</DashboardLayout>

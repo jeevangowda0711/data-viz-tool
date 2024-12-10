@@ -1,0 +1,19 @@
+---
+import Layout from './Layout.astro';
+import Sidebar from '../components/dashboard/Sidebar';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<Layout title={title} showHeader={false}>
+  <div class="flex">
+    <Sidebar client:load />
+    <main class="ml-64 w-full min-h-screen p-8">
+      <slot />
+    </main>
+  </div>
+</Layout>
