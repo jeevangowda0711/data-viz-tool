@@ -45,7 +45,7 @@ The backend is built using FastAPI and includes the following components:
     - **ai_service.py**: Handles AI-driven insights generation.
     - **dataset_service.py**: Handles dataset processing and storage.
     - **visualization_service.py**: Handles visualization creation and retrieval.
-    - **caching**: Contains the caching logic using Redis.
+  - **caching**: Contains the caching logic using Redis.
     - **cache.py**: Configures the Redis client and provides caching utilities.
   - **main.py**: Main entry point for the FastAPI application.
 
