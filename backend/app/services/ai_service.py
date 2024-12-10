@@ -1,14 +1,10 @@
-"""
-Integrates with AI APIs to generate insights from datasets.
-"""
-
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 import pandas as pd
-import google.generativeai as genai
 from io import StringIO
 from app.models.dataset import Dataset
 from app.core.config import Config
+import google.generativeai as genai
 
 def generate_insights(dataset_id: int, db: Session):
     # Retrieve the dataset from the database
@@ -40,11 +36,13 @@ You are an AI assistant helping users understand their datasets.
    - Explain what the resulting plot will reveal.
 """
     
-    # Send the request to the AI API
+    # Call the AI model
     try:
         response = model.generate_content(prompt)
-        insights = response.text
+        insights_text = response.text.strip()  # Ensure the text is clean and trimmed
+
+        # Return the insights as a plain string
+        return {"insights": insights_text}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error calling the AI API: {str(e)}")
-    
-    return {"insights": insights}

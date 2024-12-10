@@ -24,7 +24,6 @@ import {
 } from 'chart.js';
 import { Bar, Line, Pie, Scatter, Radar, Bubble, Doughnut, PolarArea } from 'react-chartjs-2';
 
-// Register the required components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -70,8 +69,14 @@ export default function VisualizationBuilder() {
   useEffect(() => {
     const fetchDatasets = async () => {
       try {
-        const response = await API.get('/datasets');
+        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+        const response = await API.get('/datasets', {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the JWT token in the Authorization header
+          },
+        });
         setDatasets(response.data);
+        console.log('Fetched datasets:', response.data); // Add logging
       } catch (error) {
         console.error('Failed to fetch datasets:', error);
       }

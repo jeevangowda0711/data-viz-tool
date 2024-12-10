@@ -7,36 +7,57 @@ import ReactMarkdown from 'react-markdown';
  * Component for showing AI-generated insights from datasets.
  */
 export default function AIInsights() {
-  const [insights, setInsights] = useState(null);
-  const [error, setError] = useState(null);
-  const [datasetId, setDatasetId] = useState('');
-  const [datasets, setDatasets] = useState([]);
+  const [insights, setInsights] = useState(''); // Stores insights and recommendations
+  const [error, setError] = useState(null); // Stores error messages
+  const [datasetId, setDatasetId] = useState(''); // Selected dataset ID
+  const [datasets, setDatasets] = useState([]); // List of datasets
 
+  // Fetch available datasets when the component mounts
   useEffect(() => {
-    // Fetch available datasets
     const fetchDatasets = async () => {
       try {
-        const response = await API.get('/datasets');
-        setDatasets(response.data);
+        const token = localStorage.getItem('token'); // Retrieve JWT token from localStorage
+        const response = await API.get('/datasets', {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include token in Authorization header
+          },
+        });
+        setDatasets(response.data); // Store datasets in state
       } catch (error) {
         console.error('Failed to fetch datasets:', error);
       }
     };
-
     fetchDatasets();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handle dataset selection
+  const handleDatasetSelect = (e) => {
+    setDatasetId(e.target.value);
+  };
+
+  // Generate insights for the selected dataset
+  const handleGenerateInsights = async () => {
     try {
-      const response = await API.post('/ai-insights/insights', {
-        dataset_id: datasetId,
+      const token = localStorage.getItem('token'); // Retrieve JWT token
+      const response = await API.post(`/datasets/${datasetId}/insights`, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Include token in Authorization header
+        },
       });
-      setInsights(response.data);
+
+      const insightsData = response.data.insights.insights;
+
+      // Check if insights exist and are a string
+      if (typeof insightsData === 'string') {
+        setInsights(insightsData); // Render Markdown content
+      } else {
+        setError('Unexpected response format');
+        console.error('Unexpected response format:', insightsData);
+      }
+
       toast.success('Insights generated successfully');
     } catch (error) {
-      setError(error);
-      toast.error('Failed to generate insights');
+      setError('Failed to generate insights');
       console.error('Failed to generate insights:', error);
     }
   };
@@ -44,34 +65,32 @@ export default function AIInsights() {
   return (
     <div className="max-w-2xl mx-auto">
       <h2 className="text-3xl font-bold mb-8">AI Insights</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Select Dataset:</label>
-          <select
-            value={datasetId}
-            onChange={(e) => setDatasetId(e.target.value)}
-            className="input-field"
-            required
-          >
-            <option value="" disabled>Select a dataset</option>
-            {datasets.map((dataset) => (
-              <option key={dataset.id} value={dataset.id}>
-                {dataset.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit" className="btn-primary w-full">Generate Insights</button>
-      </form>
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">Select Dataset:</label>
+        <select
+          value={datasetId}
+          onChange={handleDatasetSelect}
+          className="input-field"
+          required
+        >
+          <option value="" disabled>Select a dataset</option>
+          {datasets.map((dataset) => (
+            <option key={dataset.id} value={dataset.id}>
+              {dataset.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button onClick={handleGenerateInsights} className="btn-primary w-full">Generate Insights</button>
       {insights && (
         <div className="mt-8">
           <h3 className="text-xl font-semibold mb-4">Insights:</h3>
-          <div className="bg-gray-100 p-4 rounded whitespace-pre-wrap">
-            <ReactMarkdown>{insights.insights}</ReactMarkdown>
+          <div className="bg-gray-100 dark:bg-gray-800 dark:text-white p-4 rounded whitespace-pre-wrap">
+            <ReactMarkdown>{insights}</ReactMarkdown>
           </div>
         </div>
       )}
-      {error && <p className="text-red-500 mt-4">Error: {error.message}</p>}
+      {error && <p className="text-red-500 mt-4">Error: {error}</p>}
       <Toaster />
     </div>
   );
