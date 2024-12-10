@@ -31,9 +31,10 @@ def generate_insights(dataset_id: int, db: Session):
     prompt = f"""
 You are an AI assistant helping users understand their datasets. 
 1. Generate concise insights from the following dataset: {data_payload}. Provide only high-level information about trends, outliers, or key points.
-2. Based on the data provided, recommend visualizations for bar, line, or pie charts. For each chart:
-   - Suggest the most relevant X and Y columns.
+2. Based on the data provided, recommend visualizations for the following chart types: Bar, Line, Pie, Scatter, Radar, Bubble, Doughnut, and Polar Area. For each chart:
+   - Suggest the most relevant X and Y columns (or slices and values, where applicable).
    - Explain what the resulting plot will reveal.
+   - Include additional insights that the chart may highlight.
 """
     
     # Call the AI model

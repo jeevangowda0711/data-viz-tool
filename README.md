@@ -45,6 +45,8 @@ The backend is built using FastAPI and includes the following components:
     - **ai_service.py**: Handles AI-driven insights generation.
     - **dataset_service.py**: Handles dataset processing and storage.
     - **visualization_service.py**: Handles visualization creation and retrieval.
+    - **caching**: Contains the caching logic using Redis.
+    - **cache.py**: Configures the Redis client and provides caching utilities.
   - **main.py**: Main entry point for the FastAPI application.
 
 ### Frontend
@@ -68,6 +70,14 @@ The application uses SQLAlchemy for ORM and Alembic for database migrations. The
 ### AI Integration
 
 The application integrates with Google Generative AI to generate insights from datasets. The AI integration logic is handled in the `app/services/ai_service.py` file.
+
+### Caching
+
+The application uses Redis for caching to improve performance and scalability. Caching is implemented for the following functionalities:
+
+- **Datasets**: Uploaded datasets are cached to reduce the load on the database and speed up retrieval times.
+- **Visualizations**: Created visualizations are cached to reduce the load on the database and speed up retrieval times.
+- **AI Insights**: Generated AI insights are cached to avoid repeated computations and speed up retrieval times.
 
 ## Prerequisites
 

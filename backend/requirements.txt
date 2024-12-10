@@ -19,3 +19,4 @@ pytest  # For running tests
 pytest-asyncio  # For testing async functions
 httpx  # Required for starlette.testclient
 google-generativeai  # Google Generative AI library
+redis  # For caching
