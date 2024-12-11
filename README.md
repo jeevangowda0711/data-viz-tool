@@ -119,6 +119,7 @@ The application uses Redis for caching to improve performance and scalability. C
    DATABASE_URL=your_database_url
    JWT_SECRET_KEY=your_jwt_secret_key
    GEMINI_API_KEY=your_gemini_api_key
+   REDIS_URL=your_redis_url
    ```
 
 5. **Run the database migrations**:
